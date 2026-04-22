@@ -1,0 +1,14 @@
+---
+title: "Project 3 Report"
+author: "Tim Cook, Alex Poplawski, and T.J. Seislove"
+date: "4/21/2026"
+output:
+  html_document:
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(janitor)
+```
