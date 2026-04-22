@@ -464,6 +464,18 @@ pre code {
 <p><a href="https://www.hockey-reference.com/playoffs/NHL_2024.html">Playoffs</a></p>
 <p><a href="https://www.hockey-reference.com/leagues/NHL_2024.html">Regular Season</a></p>
 </div>
+<div id="data-import" class="section level3">
+<h3>Data Import</h3>
+<pre class="r"><code>library(readxl)
+library(writexl)
+library(janitor)
+
+nhl_playoffs &lt;- read_excel(&quot;2024_NHL_playoffs.xlsx&quot;) %&gt;%
+  clean_names()
+nhl_regular  &lt;- read_excel(&quot;2024_NHL_regular.xlsx&quot;) %&gt;%
+  clean_names()</code></pre>
+<p>Our data was stored in two objects titled nhl_playoffs and nfl_regular, which were imported from the Excel files “2024_NHL_playoffs.xlsx” and “2024_NHL_regular.xlsx.” This was done using the read_excel() function from the readxl package. We then applied the clean_names() function from the janitor package to convert the column names to lowercase characters while also replacing spaces or special characters with underscores. This allows the variables in the data sets to be easier easier to work with reducing any potential errors further on in our analysis.</p>
+</div>
 </div>
 
 

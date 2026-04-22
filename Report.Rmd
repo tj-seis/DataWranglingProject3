@@ -36,3 +36,16 @@ The regular season dataset also tracks statistics regarding shutouts, powerplays
 [Playoffs](https://www.hockey-reference.com/playoffs/NHL_2024.html)
 
 [Regular Season](https://www.hockey-reference.com/leagues/NHL_2024.html)
+
+### Excel Data Import
+```{r}
+library(readxl)
+library(writexl)
+library(janitor)
+
+nhl_playoffs <- read_excel("2024_NHL_playoffs.xlsx") %>%
+  clean_names()
+nhl_regular  <- read_excel("2024_NHL_regular.xlsx") %>%
+  clean_names()
+```
+Our data was stored in two objects titled nhl_playoffs and nfl_regular, which were imported from the Excel files "2024_NHL_playoffs.xlsx" and "2024_NHL_regular.xlsx." This was done using the read_excel() function from the readxl package. We then applied the clean_names() function from the janitor package to convert the column names to lowercase characters while also replacing spaces or special characters with underscores. This allows the variables in the data sets to be easier easier to work with reducing any potential errors further on in our analysis. 
