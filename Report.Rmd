@@ -13,4 +13,18 @@ library(tidyverse)
 library(janitor)
 ```
 
-# 
+# 2024 NHL Playoff Teams
+
+**Report By: Tim Cook, Alex Poplawski, and T.J. Seislove**
+
+### Introduction
+
+The datasets for this project are team statistics for the 2024 NHL regular season and playoffs.
+
+The first dataset contains playoff stats for the 16 teams that made the playoffs. The recorded stats are games played, wins, losses, ties (all 0 because there are no ties in the playoffs), overtime wins, overtime losses, win-loss percentage, goals scored, goals against, and goal differential.
+
+The second dataset contains the regular season stats for all 32 NHL teams, but we're only interested in the 16 that made the playoffs. It shares many statistical categories with the playoffs data, but there are few that are only in the playoffs set.
+
+Overtime wins are not counted in the regular season, because that doesn't matter for the NHL points system. Teams get 2 points for any win, 1 point for an OT loss, and 0 for a regulation loss. Goal differential is also missing in the regular season stats, but there's no clear reason why.
+
+While the playoffs track win-loss percentage, the regular season tracks points percentage. The number of points a team gets (using the above points system) is divided by the possible 164 points attainable in an 82 game season.
