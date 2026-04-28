@@ -11,6 +11,12 @@ output:
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 library(tidyverse)
 library(janitor)
+library(readxl)
+library(mosaic)
+library(readr)
+library(dplyr)
+library(knitr)
+library(broom)
 ```
 
 # 2024 NHL Playoff Teams
@@ -39,13 +45,10 @@ The regular season dataset also tracks statistics regarding shutouts, powerplays
 
 ### Excel Data Import
 ```{r}
-library(readxl)
-library(writexl)
-library(janitor)
-
-nhl_playoffs <- read_excel("2024_NHL_playoffs.xlsx") %>%
-  clean_names()
-nhl_regular  <- read_excel("2024_NHL_regular.xlsx") %>%
-  clean_names()
+nhlreg <- read_excel("2024_NHL_regular.xlsx", skip = 1)
+nhlpost <- read_excel("2024_NHL_playoffs.xlsx")
+clean_names <- function(x) {str_remove(x, "\\*")}
+nhlreg <- nhlreg %>% mutate(Team = clean_names(Team))
+nhlcomb <- left_join(nhlpost, nhlreg, by = "Team", suffix = c("_playoffs", "_regular"))
 ```
-Our data was stored in two objects titled nhl_playoffs and nfl_regular, which were imported from the Excel files "2024_NHL_playoffs.xlsx" and "2024_NHL_regular.xlsx." This was done using the read_excel() function from the readxl package. We then applied the clean_names() function from the janitor package to convert the column names to lowercase characters while also replacing spaces or special characters with underscores. This allows the variables in the data sets to be easier easier to work with reducing any potential errors further on in our analysis. 
+Our data was stored in two objects titled nhlpost and nhlreg, which were imported from the Excel files "2024_NHL_playoffs.xlsx" and "2024_NHL_regular.xlsx." This was done using the read_excel() function from the readxl package. We then applied the clean_names() function from the janitor package to convert the column names to lowercase characters while also replacing spaces or special characters with underscores. This allows the variables in the data sets to be easier to work with reducing any potential errors further on in our analysis. We also used left_join() to create a single large table containing important information from both data sets.

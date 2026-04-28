@@ -464,17 +464,14 @@ pre code {
 <p><a href="https://www.hockey-reference.com/playoffs/NHL_2024.html">Playoffs</a></p>
 <p><a href="https://www.hockey-reference.com/leagues/NHL_2024.html">Regular Season</a></p>
 </div>
-<div id="data-import" class="section level3">
-<h3>Data Import</h3>
-<pre class="r"><code>library(readxl)
-library(writexl)
-library(janitor)
-
-nhl_playoffs &lt;- read_excel(&quot;2024_NHL_playoffs.xlsx&quot;) %&gt;%
-  clean_names()
-nhl_regular  &lt;- read_excel(&quot;2024_NHL_regular.xlsx&quot;) %&gt;%
-  clean_names()</code></pre>
-<p>Our data was stored in two objects titled nhl_playoffs and nfl_regular, which were imported from the Excel files “2024_NHL_playoffs.xlsx” and “2024_NHL_regular.xlsx.” This was done using the read_excel() function from the readxl package. We then applied the clean_names() function from the janitor package to convert the column names to lowercase characters while also replacing spaces or special characters with underscores. This allows the variables in the data sets to be easier easier to work with reducing any potential errors further on in our analysis.</p>
+<div id="excel-data-import" class="section level3">
+<h3>Excel Data Import</h3>
+<pre class="r"><code>nhlreg &lt;- read_excel(&quot;2024_NHL_regular.xlsx&quot;, skip = 1)
+nhlpost &lt;- read_excel(&quot;2024_NHL_playoffs.xlsx&quot;)
+clean_names &lt;- function(x) {str_remove(x, &quot;\\*&quot;)}
+nhlreg &lt;- nhlreg %&gt;% mutate(Team = clean_names(Team))
+nhlcomb &lt;- left_join(nhlpost, nhlreg, by = &quot;Team&quot;, suffix = c(&quot;_playoffs&quot;, &quot;_regular&quot;))</code></pre>
+<p>Our data was stored in two objects titled nhlpost and nhlreg, which were imported from the Excel files “2024_NHL_playoffs.xlsx” and “2024_NHL_regular.xlsx.” This was done using the read_excel() function from the readxl package. We then applied the clean_names() function from the janitor package to convert the column names to lowercase characters while also replacing spaces or special characters with underscores. This allows the variables in the data sets to be easier to work with reducing any potential errors further on in our analysis. We also used left_join() to create a single large table containing important information from both data sets.</p>
 </div>
 </div>
 
