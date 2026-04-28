@@ -44,6 +44,7 @@ The regular season dataset also tracks statistics regarding shutouts, powerplays
 [Regular Season](https://www.hockey-reference.com/leagues/NHL_2024.html)
 
 ### Excel Data Import
+
 ```{r}
 nhlreg <- read_excel("2024_NHL_regular.xlsx", skip = 1)
 nhlpost <- read_excel("2024_NHL_playoffs.xlsx")
@@ -51,4 +52,50 @@ clean_names <- function(x) {str_remove(x, "\\*")}
 nhlreg <- nhlreg %>% mutate(Team = clean_names(Team))
 nhlcomb <- left_join(nhlpost, nhlreg, by = "Team", suffix = c("_playoffs", "_regular"))
 ```
+
 Our data was stored in two objects titled nhlpost and nhlreg, which were imported from the Excel files "2024_NHL_playoffs.xlsx" and "2024_NHL_regular.xlsx." This was done using the read_excel() function from the readxl package. We then applied the clean_names() function from the janitor package to convert the column names to lowercase characters while also replacing spaces or special characters with underscores. This allows the variables in the data sets to be easier to work with reducing any potential errors further on in our analysis. We also used left_join() to create a single large table containing important information from both data sets.
+
+# =================
+# Exploratory Data Analysis
+# =================
+
+# a) Variable Exploration
+
+#Distribution of Regular Season Scoring
+```{r, tidy=TRUE}
+ggplot(nhlreg, aes(x = `GF/G`)) + geom_histogram(bins = 12, fill = "red3", color = "black") + labs(title = "Distribution of Regular Season Goals Per Game", x = "Goals Scored Per Game")
+
+
+kable(nhlreg %>% summarize(Mean = mean(`GF/G`), SD = sd(`GF/G`), Median = median(`GF/G`)), caption = "Regular Season Scoring Summary")
+```
+
+#Distribution of Playoff Win Percentage
+```{r, tidy=TRUE}
+ggplot(nhlpost, aes(x = `W-L%`)) + geom_histogram(bins = 8, fill = "black", color = "red3") + labs(title = "Distribution of Playoff Win Percentage", x = "Goals Scored Per Game", x = "Win-Loss %")
+
+
+kable(nhlpost %>% summarize(Mean = mean(`W-L%`), SD = sd(`W-L%`), Median = median(`W-L%`)), caption = "Post Season Win % Summary")
+```
+
+# b) Primary & Foreign Keys
+
+#Primary Key (Regular Season): Team. In the raw file, teams that made it to the playoffs had asterisks that I cleaned using str_remove to create the "Foreign Key."
+#Primary Key (Playoffs): Team. These were the 16 teams that made it to the playoffs.
+#Compatability: By joining the two datasets based on Team, we can compare how the team did between the two facets of the season.
+
+# =================
+# Research Solutions
+# =================
+
+#Research Question
+
+#We want to see if the team(s) that are super dominant in the regular season is just a trap when the playoffs roll around. So we want to see how strongly does a teams regular season points percentage predict their post season win percentage? We're asking this because there is the ever going debate about if "regular season teams" (Dallas Cowboys in the NFL) struggle when the games become more decisive in the playoffs. We will use a linear model to see if the regular season standings actually matter once the playoffs begin.
+
+#Analysis and Results
+```{r, tidy=TRUE}
+ggplot(nhlcomb, aes(x = `PTS%`, y = `W-L%`)) + geom_point(size = 4, color = "darkred", alpha = .6) + geom_smooth(method = "lm", color = "blue", se = FALSE) + geom_text(aes(label = Team), check_overlap = TRUE, vjust = -1, size = 3) + labs(title = "Predicting Playoff Success with Regularr Season Stats", x = "Regular Season Points Percentage", y = "Playoff Win-Loss Percentage") + theme_minimal()
+
+kable(cor(nhlcomb$`PTS%`, nhlcomb$`W-L%`, use = "complete.obs"))
+```
+
+Based on the results of our graph, it seems like there is a very strong correlation between Regular Season Success & Playoff Success.
